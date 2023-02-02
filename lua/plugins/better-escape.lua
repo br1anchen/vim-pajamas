@@ -1,12 +1,5 @@
 return {
   {
-    "nvim-neo-tree/neo-tree.nvim",
-    keys = {
-      { "<leader>tt", "<cmd> Neotree toggle<cr>", desc = "NeoTree" },
-    },
-  },
-
-  {
     "max397574/better-escape.nvim",
     event = "InsertCharPre",
     config = function()
