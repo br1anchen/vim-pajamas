@@ -4,6 +4,29 @@ return {
     keys = function()
       return {}
     end,
+    config = function()
+      local luasnip = require("luasnip")
+
+      luasnip.filetype_extend("dart", { "flutter" })
+      luasnip.config.set_config({
+        history = true,
+        updateevents = "TextChanged,TextChangedI",
+      })
+
+      require("luasnip.loaders.from_vscode").lazy_load({ paths = vim.g.luasnippets_path or "" })
+      require("luasnip.loaders.from_vscode").lazy_load()
+
+      vim.api.nvim_create_autocmd("InsertLeave", {
+        callback = function()
+          if
+            require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
+            and not require("luasnip").session.jump_active
+          then
+            require("luasnip").unlink_current()
+          end
+        end,
+      })
+    end,
   },
 
   {
@@ -30,14 +53,7 @@ return {
       "hrsh7th/cmp-emoji",
       "zbirenbaum/copilot-cmp",
     },
-
     opts = function(_, opts)
-      local has_words_before = function()
-        unpack = unpack or table.unpack
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-      end
-
       local luasnip = require("luasnip")
       local cmp = require("cmp")
 
@@ -45,26 +61,43 @@ return {
         ["<Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_next_item()
-            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-            -- they way you will only jump inside the snippet region
           elseif luasnip.expand_or_jumpable() then
-            luasnip.expand_or_jump()
-          elseif has_words_before() then
-            cmp.complete()
+            vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-expand-or-jump", true, true, true), "")
           else
             fallback()
           end
-        end, { "i", "s" }),
+        end, {
+          "i",
+          "s",
+        }),
         ["<S-Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
           elseif luasnip.jumpable(-1) then
-            luasnip.jump(-1)
+            vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-jump-prev", true, true, true), "")
           else
             fallback()
           end
-        end, { "i", "s" }),
+        end, {
+          "i",
+          "s",
+        }),
       })
+
+      opts.formatting = {
+        format = function(entry, vim_item)
+          if entry.source.name == "copilot" then
+            vim_item.kind = "Copilot"
+            vim_item.kind = string.format("%s %s", " ", "Copilot")
+            vim_item.kind_hl_group = "CmpItemKindCopilot"
+            return vim_item
+          end
+
+          local icons = require("lazyvim.config").icons.kinds
+          vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
+          return vim_item
+        end,
+      }
 
       opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "emoji" }, { name = "copilot" } }))
     end,
