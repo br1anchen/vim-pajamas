@@ -63,7 +63,7 @@ return {
 
       require("which-key").register({
         v = {
-          name = "+Window",
+          name = "+Windows",
           ["<"] = { "<C-w><", "window resize left" },
           [">"] = { "<C-w>>", "window resize right" },
           ["-"] = { "<C-w>-", "window resize small" },
