@@ -29,7 +29,7 @@ return {
         sourcekit = {},
         sqls = {},
         stylelint_lsp = {},
-        sumneko_lua = {},
+        lua_ls = {},
         taplo = {},
         texlab = {},
         tsserver = {},
