@@ -30,6 +30,7 @@ return {
         sqls = {},
         stylelint_lsp = {},
         lua_ls = {},
+        tailwindcss = {},
         taplo = {},
         texlab = {},
         tsserver = {},
