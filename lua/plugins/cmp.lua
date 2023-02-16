@@ -48,10 +48,21 @@ return {
   },
 
   {
+    "roobert/tailwindcss-colorizer-cmp.nvim",
+    -- optionally, override the default options:
+    config = function()
+      require("tailwindcss-colorizer-cmp").setup({
+        color_square_width = 2,
+      })
+    end,
+  },
+
+  {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      "hrsh7th/cmp-emoji",
-      "zbirenbaum/copilot-cmp",
+      { "hrsh7th/cmp-emoji" },
+      { "zbirenbaum/copilot-cmp" },
+      { "roobert/tailwindcss-colorizer-cmp.nvim" },
     },
     opts = function(_, opts)
       local luasnip = require("luasnip")
@@ -90,12 +101,12 @@ return {
             vim_item.kind = "Copilot"
             vim_item.kind = string.format("%s %s", " ", "Copilot")
             vim_item.kind_hl_group = "CmpItemKindCopilot"
-            return vim_item
+          else
+            local icons = require("lazyvim.config").icons.kinds
+            vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
           end
 
-          local icons = require("lazyvim.config").icons.kinds
-          vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
-          return vim_item
+          return require("tailwindcss-colorizer-cmp").formatter(entry, vim_item)
         end,
       }
 
