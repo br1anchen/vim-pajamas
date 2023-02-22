@@ -1,3 +1,17 @@
+function tprint(tbl)
+  for index, data in ipairs(tbl) do
+    print(index)
+
+    if type(data) == "table" then
+      for key, value in pairs(data) do
+        print("\t", key, value)
+      end
+    else
+      print(data)
+    end
+  end
+end
+
 return {
   "br1anchen/git-worktree.nvim",
   branch = "brian/tmp/fix-97",
@@ -34,7 +48,8 @@ return {
         end))
 
         melos_bs_job:after_failure(vim.schedule_wrap(function(j)
-          print("Melos bootstrap failed: " .. j:stderr_result())
+          print("Melos bootstrap failed: ")
+          print(tprint(j:stderr_result()))
         end))
 
         melos_bs_job:start()
