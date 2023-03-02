@@ -18,6 +18,7 @@ return {
         astro = {},
         bashls = {},
         dartls = {},
+        eslint = {},
         html = {},
         jsonls = {},
         lemminx = {},
