@@ -2,6 +2,18 @@ return {
   { "tpope/vim-abolish" },
 
   {
+    "echasnovski/mini.surround",
+    enabled = false,
+  },
+
+  {
+    "kylechui/nvim-surround",
+    config = function()
+      require("nvim-surround").setup()
+    end,
+  },
+
+  {
     "rhysd/git-messenger.vim",
     config = function()
       require("which-key").register({
