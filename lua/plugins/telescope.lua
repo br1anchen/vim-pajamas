@@ -1,14 +1,41 @@
 return {
   {
-    "nvim-telescope/telescope.nvim",
+    "aaronhallaert/advanced-git-search.nvim",
     keys = {
       {
-        "<leader>ff",
+        "<leader>gbf",
         function()
-          require("telescope.builtin").find_files()
+          require("telescope").extensions.advanced_git_search.diff_branch_file()
         end,
-        desc = "Find Files (workspace dir)",
+        desc = "Find diff for current file in branches",
       },
+      {
+        "<leader>gl",
+        function()
+          require("telescope").extensions.advanced_git_search.diff_commit_line()
+        end,
+        desc = "Find commit by selected lines",
+      },
+      {
+        "<leader>gcf",
+        function()
+          require("telescope").extensions.advanced_git_search.diff_commit_file()
+        end,
+        desc = "Find commit by current file",
+      },
+    },
+    config = function()
+      require("telescope").load_extension("advanced_git_search")
+    end,
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      -- to show diff splits and open commits in browser
+      "tpope/vim-fugitive",
+    },
+  },
+  {
+    "nvim-telescope/telescope.nvim",
+    keys = {
       {
         "<leader>fa",
         function()
@@ -23,33 +50,9 @@ return {
         end,
         desc = "Find Plugin File",
       },
-      {
-        "<leader>sg",
-        function()
-          require("telescope.builtin").live_grep()
-        end,
-        desc = "Grep (workspace dir)",
-      },
-      {
-        "<leader>sw",
-        function()
-          require("telescope.builtin").grep_string()
-        end,
-        desc = "Grep (root dir)",
-      },
     },
     opts = {
       defaults = {
-        vimgrep_arguments = {
-          "rg",
-          "-L",
-          "--color=never",
-          "--no-heading",
-          "--with-filename",
-          "--line-number",
-          "--column",
-          "--smart-case",
-        },
         layout_strategy = "horizontal",
         layout_config = {
           horizontal = {
