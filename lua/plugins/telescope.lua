@@ -37,6 +37,13 @@ return {
     "nvim-telescope/telescope.nvim",
     keys = {
       {
+        "<leader>ff",
+        function()
+          require("telescope.builtin").find_files()
+        end,
+        desc = "Find Files (workspace dir)",
+      },
+      {
         "<leader>fa",
         function()
           require("telescope.builtin").find_files({ follow = true, no_ignore = true, hidden = true })
@@ -53,6 +60,16 @@ return {
     },
     opts = {
       defaults = {
+        vimgrep_arguments = {
+          "rg",
+          "-L",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+        },
         layout_strategy = "horizontal",
         layout_config = {
           horizontal = {
