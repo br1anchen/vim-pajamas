@@ -6,3 +6,5 @@ local function termcodes(str)
 end
 
 vim.keymap.set("t", "<C-e>", termcodes("<C-\\><C-N>"), { desc = "escape terminal mode" })
+
+vim.keymap.set({ "i", "v", "n", "s" }, "<C-w>", "<cmd>w<cr><esc>", { desc = "Save file" })
