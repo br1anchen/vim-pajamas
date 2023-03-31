@@ -5,7 +5,6 @@ return {
       "astro",
       "bash",
       "css",
-      "dart",
       "html",
       "java",
       "javascript",
@@ -25,5 +24,6 @@ return {
       "vim",
       "yaml",
     },
+    highlight = { enable = true, disable = { "dart" } },
   },
 }
