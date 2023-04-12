@@ -36,7 +36,7 @@ return {
         rnix = {},
         rust_analyzer = {},
         sourcekit = {},
-        sqls = {},
+        sqlls = {},
         stylelint_lsp = {},
         lua_ls = {},
         tailwindcss = {},
