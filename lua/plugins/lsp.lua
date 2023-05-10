@@ -53,7 +53,13 @@ return {
         taplo = {},
         texlab = {},
         tsserver = {},
-        yamlls = {},
+        yamlls = {
+          settings = {
+            yaml = {
+              keyOrdering = false,
+            },
+          },
+        },
       },
       setup = {
         dartls = function(_, opts)
