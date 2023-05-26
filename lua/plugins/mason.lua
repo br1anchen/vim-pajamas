@@ -5,6 +5,7 @@ return {
     opts = {
       ensure_installed = {
         "eslint_d",
+        "prettier",
         "prettierd",
         "luacheck",
         "stylua",

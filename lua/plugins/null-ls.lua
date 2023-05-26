@@ -6,7 +6,7 @@ return {
     return {
       sources = {
         -- JS html css stuff
-        b.formatting.prettierd,
+        b.formatting.prettier,
         b.diagnostics.eslint,
 
         -- Lua
