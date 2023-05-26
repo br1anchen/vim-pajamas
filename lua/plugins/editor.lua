@@ -54,19 +54,6 @@ return {
   },
 
   {
-    "NvChad/nvim-colorizer.lua",
-    opts = {
-      filetypes = {
-        "*",
-        dart = { AARRGGBB = true },
-      },
-      user_default_options = {
-        tailwind = true,
-      },
-    },
-  },
-
-  {
     "numToStr/Comment.nvim",
     config = function()
       require("Comment").setup()
