@@ -7,6 +7,33 @@ return {
   },
 
   {
+    "nvim-pack/nvim-spectre",
+    keys = {
+      {
+        "<leader>rs",
+        function()
+          require("spectre").open_file_search()
+        end,
+        desc = "Replace in current file (Spectre)",
+      },
+      {
+        "<leader>rp",
+        function()
+          require("spectre").open()
+        end,
+        desc = "Replace in files (Spectre)",
+      },
+      {
+        "<leader>rw",
+        function()
+          require("spectre").open_visual({ select_word = true })
+        end,
+        desc = "Replace current word (Spectre)",
+      },
+    },
+  },
+
+  {
     "folke/noice.nvim",
     opts = {
       messages = {
