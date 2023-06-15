@@ -8,3 +8,5 @@ end
 vim.keymap.set("t", "<C-e>", termcodes("<C-\\><C-N>"), { desc = "escape terminal mode" })
 
 vim.keymap.set({ "i", "v", "n", "s" }, "<C-w>", "<cmd>w<cr><esc>", { desc = "Save file" })
+
+vim.keymap.set({ "v", "n", "s" }, "<leader>R", "<cmd>checktime<cr><esc>", { desc = "Reload" })
