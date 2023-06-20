@@ -35,7 +35,8 @@ return {
         b.formatting.black,
 
         -- Swift/Obj-c
-        b.formatting.swiftformat,
+        -- b.formatting.swiftformat,
+        b.formatting.swift_format,
 
         -- XML
 
