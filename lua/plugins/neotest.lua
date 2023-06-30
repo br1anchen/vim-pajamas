@@ -1,61 +1,103 @@
-local function neotest()
-  return require("neotest")
-end
-local function open()
-  neotest().output.open({ enter = true, short = false })
-end
-local function run_file()
-  neotest().run.run(vim.fn.expand("%"))
-end
-local function run_file_sync()
-  neotest().run.run({ vim.fn.expand("%"), concurrent = false })
-end
-local function nearest()
-  neotest().run.run()
-end
-local function next_failed()
-  neotest().jump.prev({ status = "failed" })
-end
-local function prev_failed()
-  neotest().jump.next({ status = "failed" })
-end
-local function toggle_summary()
-  neotest().summary.toggle()
-end
-local function cancel()
-  neotest().run.stop({ interactive = true })
-end
+-- local Job = require("plenary.job")
+--
+-- ---Join path segments using the os separator
+-- ---@vararg string
+-- ---@return string
+-- local function path_join(...)
+--   local result = table.concat(vim.tbl_flatten({ ... }), "/"):gsub("/" .. "+", "/")
+--   return result
+-- end
+--
+-- local function _flutter_sdk_root(bin_path)
+--   -- convert path/to/flutter/bin/flutter into path/to/flutter
+--   return vim.fn.fnamemodify(bin_path, ":h:h")
+-- end
+--
+-- local function _flutter_sdk_dart_bin(flutter_sdk)
+--   -- retrieve the Dart binary from the Flutter SDK
+--   local binary_name = "dart"
+--   return path_join(flutter_sdk, "bin", binary_name)
+-- end
+--
+-- local function get_default_binaries()
+--   local flutter_bin = vim.fn.resolve(vim.fn.exepath("flutter"))
+--   return {
+--     flutter_bin = flutter_bin,
+--     dart_bin = vim.fn.resolve(vim.fn.exepath("dart")),
+--     flutter_sdk = _flutter_sdk_root(flutter_bin),
+--   }
+-- end
+--
+-- local function path_from_lookup_cmd(lookup_cmd)
+--   local paths = {}
+--   local parts = vim.split(lookup_cmd, " ")
+--   local cmd = parts[1]
+--   local args = vim.list_slice(parts, 2, #parts)
+--
+--   local job = Job:new({ command = cmd, args = args })
+--   job:after_failure(vim.schedule_wrap(function()
+--     print(string.format("Error running %s", lookup_cmd))
+--   end))
+--   job:after_success(vim.schedule_wrap(function(j, _)
+--     local result = j:result()
+--     local flutter_sdk_path = result[1]
+--     if flutter_sdk_path then
+--       paths.dart_bin = _flutter_sdk_dart_bin(flutter_sdk_path)
+--       paths.flutter_bin = path_join(flutter_sdk_path, "bin", "flutter")
+--       paths.flutter_sdk = flutter_sdk_path
+--     else
+--       paths = get_default_binaries()
+--     end
+--     return paths
+--   end))
+--   job:start()
+-- end
 
 return {
-  "nvim-neotest/neotest",
-  dependencies = {
-    { "rcarriga/neotest-plenary", dependencies = { "nvim-lua/plenary.nvim" } },
-    "nvim-treesitter/nvim-treesitter",
-    "antoinemadec/FixCursorHold.nvim",
-    "rouge8/neotest-rust",
-    "sidlatau/neotest-dart",
-  },
-  keys = {
-    { "<localleader>ts", toggle_summary, desc = "neotest: toggle summary" },
-    { "<localleader>to", open, desc = "neotest: output" },
-    { "<localleader>tn", nearest, desc = "neotest: run" },
-    { "<localleader>tf", run_file, desc = "neotest: run file" },
-    { "<localleader>tF", run_file_sync, desc = "neotest: run file synchronously" },
-    { "<localleader>tc", cancel, desc = "neotest: cancel" },
-    { "[n", next_failed, desc = "jump to next failed test" },
-    { "]n", prev_failed, desc = "jump to previous failed test" },
-  },
-  config = function()
-    require("neotest").setup({
-      adapters = {
-        require("neotest-rust"),
-        require("neotest-dart")({
-          command = "flutter", -- Command being used to run tests. Defaults to `flutter`
-          -- Change it to `fvm flutter` if using FVM
-          -- change it to `dart` for Dart only tests
-          use_lsp = true, -- When set Flutter outline information is used when constructing test name.
-        }),
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "rouge8/neotest-rust",
+      -- "sidlatau/neotest-dart",
+      "marilari88/neotest-vitest",
+    },
+    keys = {
+      {
+        "<leader>tl",
+        function()
+          require("neotest").run.run_last()
+        end,
+        desc = "Run Last Test",
       },
-    })
-  end,
+      {
+        "<leader>tL",
+        function()
+          require("neotest").run.run_last({ strategy = "dap" })
+        end,
+        desc = "Debug Last Test",
+      },
+    },
+    opts = function(_, opts)
+      table.insert(opts.adapters, require("neotest-rust"))
+      table.insert(opts.adapters, require("neotest-vitest"))
+      -- table.insert(
+      --   opts.adapters,
+      --   require("neotest-dart")({
+      --     command = path_from_lookup_cmd("asdf where flutter"),
+      --     use_lsp = true,
+      --   })
+      -- )
+
+      table.insert(opts.output, { open_on_run = true })
+      table.insert(opts.quickfix, {
+        open = function()
+          if require("lazyvim.util").has("trouble.nvim") then
+            vim.cmd("Trouble quickfix")
+          else
+            vim.cmd("copen")
+          end
+        end,
+      })
+    end,
+  },
 }
