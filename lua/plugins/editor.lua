@@ -178,4 +178,15 @@ return {
       },
     },
   },
+
+  {
+    "m4xshen/hardtime.nvim",
+    event = "VeryLazy",
+    opts = {},
+    config = function()
+      require("hardtime").setup({
+        disabled_filetypes = { "qf", "netrw", "NvimTree", "lazy", "mason", "neo-tree", "neo-tree-popup", "notify" },
+      })
+    end,
+  },
 }
