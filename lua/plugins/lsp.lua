@@ -165,38 +165,6 @@ return {
           require("telescope").load_extension("flutter")
           return true
         end,
-        rust_analyzer = function(_, opts)
-          local path = vim.fn.glob(vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/") or ""
-          local codelldb_path = path .. "adapter/codelldb"
-          local liblldb_path = path .. "lldb/lib/liblldb.so"
-
-          local dap = {}
-          if vim.fn.filereadable(codelldb_path) and vim.fn.filereadable(liblldb_path) then
-            dap = {
-              adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-            }
-          else
-            local msg = "Either codelldb or liblldb is not readable."
-              .. "\n codelldb: "
-              .. codelldb_path
-              .. "\n liblldb: "
-              .. liblldb_path
-            vim.notify(msg, vim.log.levels.ERROR)
-          end
-          require("rust-tools").setup({
-            server = vim.list_extend(opts, {
-              settings = {
-                ["rust-analyzer"] = {
-                  checkOnSave = {
-                    command = "clippy",
-                  },
-                },
-              },
-            }),
-            dap = dap,
-          })
-          return true
-        end,
         tsserver = function(_, opts)
           require("lazyvim.util").on_attach(function(client, buffer)
             if client.name == "tsserver" then
