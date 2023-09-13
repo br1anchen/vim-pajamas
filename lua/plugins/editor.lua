@@ -185,7 +185,17 @@ return {
     opts = {},
     config = function()
       require("hardtime").setup({
-        disabled_filetypes = { "qf", "netrw", "NvimTree", "lazy", "mason", "neo-tree", "neo-tree-popup", "notify" },
+        disabled_filetypes = {
+          "qf",
+          "netrw",
+          "NvimTree",
+          "lazy",
+          "mason",
+          "neo-tree",
+          "neo-tree-popup",
+          "notify",
+          "DressingInput",
+        },
       })
     end,
   },
