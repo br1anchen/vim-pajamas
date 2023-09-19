@@ -10,6 +10,7 @@ return {
     depends = {
       "s1n7ax/nvim-window-picker",
     },
+    init = function() end,
     opts = {
       window = {
         position = "right",
