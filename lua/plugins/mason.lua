@@ -11,7 +11,6 @@ return {
         "stylua",
         "shellcheck",
         "shfmt",
-        "rustfmt",
         "stylelint",
         "black",
         "sqlfluff",
