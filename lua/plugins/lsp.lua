@@ -102,7 +102,7 @@ return {
       },
       setup = {
         dartls = function(_, opts)
-          require("lazyvim.util").on_attach(function(client, buffer)
+          require("lazyvim.util").lsp.on_attach(function(client, buffer)
             if client.name == "dartls" then
               require("which-key").register({
                 f = {
