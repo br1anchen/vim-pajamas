@@ -72,26 +72,8 @@ return {
     },
     opts = {
       servers = {
-        astro = {},
-        bashls = {},
         dartls = {},
-        eslint = {},
-        html = {},
-        jsonls = {},
-        lemminx = {},
-        marksman = {},
-        prismals = {},
-        pyright = {},
-        rnix = {},
-        rust_analyzer = {},
         sourcekit = {},
-        sqlls = {},
-        stylelint_lsp = {},
-        lua_ls = {},
-        tailwindcss = {},
-        taplo = {},
-        texlab = {},
-        tsserver = {},
         yamlls = {
           settings = {
             yaml = {

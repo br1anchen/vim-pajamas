@@ -4,6 +4,9 @@ return {
     local nls = require("null-ls")
     local b = nls.builtins
 
+    opts.root_dir = opts.root_dir
+      or require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git")
+
     opts.sources = vim.list_extend(opts.sources or {}, {
       -- JS html css stuff
       b.formatting.prettier,
@@ -32,7 +35,8 @@ return {
       b.diagnostics.statix,
 
       -- Python
-      b.formatting.black,
+      b.formatting.ruff,
+      b.diagnostics.ruff,
 
       -- Swift/Obj-c
       -- b.formatting.swiftformat,
