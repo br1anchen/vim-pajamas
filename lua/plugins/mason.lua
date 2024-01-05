@@ -5,6 +5,7 @@ return {
       ensure_installed = {
         "astro",
         "bashls",
+        "biome",
         "eslint",
         "html",
         "jsonls",
@@ -30,6 +31,7 @@ return {
     opts = {
       ensure_installed = {
         "codelldb",
+        "biome",
         "dart-debug-adapter",
         "eslint_d",
         "luacheck",

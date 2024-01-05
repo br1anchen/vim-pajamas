@@ -8,10 +8,6 @@ return {
       or require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git")
 
     opts.sources = vim.list_extend(opts.sources or {}, {
-      -- JS html css stuff
-      b.formatting.prettier,
-      b.diagnostics.eslint,
-
       -- Lua
       b.formatting.stylua,
       b.diagnostics.luacheck.with({ extra_args = { "--global vim" } }),
@@ -19,6 +15,27 @@ return {
       -- Shell
       b.formatting.shfmt,
       b.diagnostics.shellcheck.with({ diagnostics_format = "#{m} [#{c}]" }),
+
+      -- JavaScript/TypeScript
+      b.formatting.biome.with({
+        condition = function(utils)
+          return utils.root_has_file("biome.json")
+        end,
+      }),
+      b.formatting.prettier.with({
+        condition = function(utils)
+          return utils.root_has_file({
+            ".prettierrc",
+            ".prettierrc.json",
+            ".prettierrc.js",
+            "prettier.config.js",
+            ".prettierrc.mjs",
+            "prettier.config.mjs",
+            ".prettierrc.cjs",
+            "prettier.config.cjs",
+          })
+        end,
+      }),
 
       -- Rust
       b.formatting.rustfmt,
