@@ -59,6 +59,10 @@ return {
   },
 
   {
+    "kkoomen/vim-doge",
+  },
+
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       {
