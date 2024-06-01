@@ -10,3 +10,6 @@ vim.keymap.set("t", "<C-e>", termcodes("<C-\\><C-N>"), { desc = "escape terminal
 vim.keymap.set({ "i", "v", "n", "s" }, "<C-w>", "<cmd>w<cr><esc>", { desc = "Save file" })
 
 vim.keymap.set({ "v", "n", "s" }, "<leader>R", "<cmd>checktime<cr><esc>", { desc = "Reload" })
+
+vim.keymap.set({ "v" }, "J", ":m '>+1<CR>gv=gv ", { desc = "Move selected line down" })
+vim.keymap.set({ "v" }, "K", ":m '<-2<CR>gv=gv ", { desc = "Move selected line down" })
