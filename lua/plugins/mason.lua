@@ -21,7 +21,7 @@ return {
         "tailwindcss",
         "taplo",
         "texlab",
-        "tsserver",
+        "vtsls",
         "yamlls",
       },
     },
