@@ -13,7 +13,7 @@ return {
         "marksman",
         "prismals",
         "pyright",
-        "rnix",
+        "nil_ls",
         "rust_analyzer",
         "sqlls",
         "stylelint_lsp",
