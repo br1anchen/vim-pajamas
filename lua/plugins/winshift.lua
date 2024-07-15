@@ -1,6 +1,26 @@
 return {
   {
     "sindrets/winshift.nvim",
+    keys = {
+      { "<leader>v", group = "Windows" },
+      { "<leader>v+", "<C-w>+", desc = "window resize large" },
+      { "<leader>v-", "<C-w>-", desc = "window resize small" },
+      { "<leader>v<", "<C-w><", desc = "window resize left" },
+      { "<leader>v=", "<C-w>=", desc = "window reset size" },
+      { "<leader>v>", "<C-w>>", desc = "window resize right" },
+      { "<leader>vH", "<cmd>WinShift far_left<cr>", desc = "Move window far left" },
+      { "<leader>vJ", "<cmd>WinShift far_down<cr>", desc = "Move window far down" },
+      { "<leader>vK", "<cmd>WinShift far_up<cr>", desc = "Move window far up" },
+      { "<leader>vL", "<cmd>WinShift far_right<cr>", desc = "Move window far right" },
+      { "<leader>vd", "<cmd>close<cr>", desc = "Close window" },
+      { "<leader>vh", "<cmd>WinShift left<cr>", desc = "Move window left" },
+      { "<leader>vj", "<cmd>WinShift down<cr>", desc = "Move window down" },
+      { "<leader>vk", "<cmd>WinShift up<cr>", desc = "Move window up" },
+      { "<leader>vl", "<cmd>WinShift right<cr>", desc = "Move window right" },
+      { "<leader>vs", "<cmd>split<cr>", desc = "Split window vertical" },
+      { "<leader>vv", "<cmd>vsplit<cr>", desc = "Split window horizontal" },
+      { "<leader>vx", "<cmd>WinShift swap<cr>", desc = "Swap two windows" },
+    },
     config = function()
       require("winshift").setup({
         highlight_moving_win = true, -- Highlight the window being moved
@@ -60,29 +80,6 @@ return {
           })
         end,
       })
-
-      require("which-key").register({
-        v = {
-          name = "+Windows",
-          ["<"] = { "<C-w><", "window resize left" },
-          [">"] = { "<C-w>>", "window resize right" },
-          ["-"] = { "<C-w>-", "window resize small" },
-          ["+"] = { "<C-w>+", "window resize large" },
-          ["="] = { "<C-w>=", "window reset size" },
-          s = { "<cmd>split<cr>", "Split window vertical" },
-          v = { "<cmd>vsplit<cr>", "Split window horizontal" },
-          d = { "<cmd>close<cr>", "Close window" },
-          h = { "<cmd>WinShift left<cr>", "Move window left" },
-          H = { "<cmd>WinShift far_left<cr>", "Move window far left" },
-          j = { "<cmd>WinShift down<cr>", "Move window down" },
-          J = { "<cmd>WinShift far_down<cr>", "Move window far down" },
-          k = { "<cmd>WinShift up<cr>", "Move window up" },
-          K = { "<cmd>WinShift far_up<cr>", "Move window far up" },
-          l = { "<cmd>WinShift right<cr>", "Move window right" },
-          L = { "<cmd>WinShift far_right<cr>", "Move window far right" },
-          x = { "<cmd>WinShift swap<cr>", "Swap two windows" },
-        },
-      }, { prefix = "<leader>", mode = "n" })
     end,
   },
 }

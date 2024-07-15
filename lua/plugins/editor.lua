@@ -71,13 +71,14 @@ return {
 
   {
     "rhysd/git-messenger.vim",
-    config = function()
-      require("which-key").register({
-        g = {
-          m = { "<cmd>GitMessenger<cr>", "git messenger" },
-        },
-      }, { prefix = "<leader>", mode = "n" })
-    end,
+    keys = {
+      {
+        "<leader>gm",
+        "<cmd>GitMessenger<cr>",
+        desc = "git messenger",
+        mode = "n",
+      },
+    },
   },
 
   {
