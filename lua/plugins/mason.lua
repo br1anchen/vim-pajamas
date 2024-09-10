@@ -9,6 +9,7 @@ return {
         "eslint",
         "html",
         "jsonls",
+        "kotlin_language_server",
         "lemminx",
         "marksman",
         "prismals",
