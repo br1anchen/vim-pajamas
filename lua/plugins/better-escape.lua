@@ -4,10 +4,28 @@ return {
     event = "InsertCharPre",
     config = function()
       require("better_escape").setup({
-        mapping = { "jk" }, -- a table with mappings to use
-        timeout = vim.o.timeoutlen,
-        clear_empty_lines = false, -- clear line after escaping if there is only whitespace
-        keys = "<Esc>",
+        mapping = {
+          i = {
+            j = {
+              k = function()
+                -- Escape insert mode when jk is pressed
+                if vim.bo.filetype == "lazy" then
+                  -- <c-v> is used to avoid mappings
+                  return "<c-v>j<c-v>k"
+                end
+                return "<esc>"
+              end,
+              j = function()
+                -- Escape insert mode when jk is pressed
+                if vim.bo.filetype == "lazy" then
+                  -- <c-v> is used to avoid mappings
+                  return "<c-v>j<c-v>j"
+                end
+                return "<esc>"
+              end,
+            },
+          },
+        }, -- a table with mappings to use
       })
     end,
   },
