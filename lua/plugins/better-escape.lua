@@ -9,7 +9,7 @@ return {
             j = {
               k = function()
                 -- Escape insert mode when jk is pressed
-                if vim.bo.filetype == "lazy" then
+                if vim.bo.filetype == "lazyterm" then
                   -- <c-v> is used to avoid mappings
                   return "<c-v>j<c-v>k"
                 end
@@ -17,7 +17,7 @@ return {
               end,
               j = function()
                 -- Escape insert mode when jk is pressed
-                if vim.bo.filetype == "lazy" then
+                if vim.bo.filetype == "lazyterm" then
                   -- <c-v> is used to avoid mappings
                   return "<c-v>j<c-v>j"
                 end
