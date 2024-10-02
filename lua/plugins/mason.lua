@@ -19,7 +19,6 @@ return {
         "sqlls",
         "stylelint_lsp",
         "lua_ls",
-        "tailwindcss",
         "taplo",
         "texlab",
         "vtsls",
