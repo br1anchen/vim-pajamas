@@ -1,44 +1,5 @@
 return {
   {
-    "vuki656/package-info.nvim",
-    event = { "BufRead package.json" },
-    dependencies = { "MunifTanjim/nui.nvim" },
-    keys = {
-      {
-        "<leader>ps",
-        function()
-          require("package-info").show({ force = true })
-        end,
-        desc = "Display Latest Package Version",
-      },
-      {
-        "<leader>pd",
-        function()
-          require("package-info").delete()
-        end,
-        desc = "Delete Dependency",
-      },
-      {
-        "<leader>pp",
-        function()
-          require("package-info").change_version()
-        end,
-        desc = "Install Different Version",
-      },
-      {
-        "<leader>pp",
-        function()
-          require("package-info").install()
-        end,
-        desc = "Install New Dependency",
-      },
-    },
-    config = function()
-      require("package-info").setup()
-    end,
-  },
-
-  {
     "simrat39/rust-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
   },
