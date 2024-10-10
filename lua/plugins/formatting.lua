@@ -14,15 +14,15 @@ return {
       formatters_by_ft = {
         lua = { "stylua" },
         sh = { "shfmt" },
-        javascript = { { "prettierd", "prettier", "biome" } },
-        typescript = { { "prettierd", "prettier", "biome" } },
-        jsx = { { "prettierd", "prettier", "biome" } },
-        tsx = { { "prettierd", "prettier", "biome" } },
-        html = { { "prettierd", "prettier" } },
-        json = { { "prettierd", "prettier", "biome" } },
-        jsonc = { { "prettierd", "prettier", "biome" } },
-        yaml = { { "prettierd", "prettier" } },
-        ["markdown.mdx"] = { { "prettierd", "prettier" } },
+        javascript = { "prettier", "biome" },
+        typescript = { "prettier", "biome" },
+        jsx = { "prettier", "biome" },
+        tsx = { "prettier", "biome" },
+        html = { "prettier" },
+        json = { "prettier" },
+        jsonc = { "prettier" },
+        yaml = { "prettier" },
+        ["markdown.mdx"] = { "prettier" },
         css = { "stylelint" },
         scss = { "stylelint" },
         less = { "stylelint" },
@@ -51,7 +51,7 @@ return {
         -- },
         biome = {
           condition = function(ctx)
-            return vim.fs.find({ "biome.json" }, { path = ctx.filename, upward = true })[1]
+            return vim.fs.find({ "biome.json" }, { path = ctx.filename, upward = true })[1] ~= nil
           end,
         },
         prettier = {
@@ -65,21 +65,7 @@ return {
               "prettier.config.mjs",
               ".prettierrc.cjs",
               "prettier.config.cjs",
-            }, { path = ctx.filename, upward = true })[1]
-          end,
-        },
-        prettierd = {
-          condition = function(ctx)
-            return vim.fs.find({
-              ".prettierrc",
-              ".prettierrc.json",
-              ".prettierrc.js",
-              "prettier.config.js",
-              ".prettierrc.mjs",
-              "prettier.config.mjs",
-              ".prettierrc.cjs",
-              "prettier.config.cjs",
-            }, { path = ctx.filename, upward = true })[1]
+            }, { path = ctx.filename, upward = true })[1] ~= nil
           end,
         },
       },

@@ -15,7 +15,6 @@ return {
         "prismals",
         "pyright",
         "nil_ls",
-        "rust_analyzer",
         "sqlls",
         "stylelint_lsp",
         "lua_ls",

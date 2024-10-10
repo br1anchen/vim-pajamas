@@ -22,7 +22,6 @@ return {
     },
     opts = {
       servers = {
-        dartls = {},
         sourcekit = {},
         vtsls = {
           settings = {

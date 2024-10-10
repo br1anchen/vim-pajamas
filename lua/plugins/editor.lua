@@ -2,11 +2,6 @@ return {
   { "tpope/vim-abolish" },
 
   {
-    "echasnovski/mini.surround",
-    enabled = false,
-  },
-
-  {
     "folke/noice.nvim",
     opts = {
       messages = {
@@ -22,13 +17,6 @@ return {
         view = "mini",
       },
     },
-  },
-
-  {
-    "kylechui/nvim-surround",
-    config = function()
-      require("nvim-surround").setup()
-    end,
   },
 
   {
@@ -52,13 +40,6 @@ return {
         mode = "n",
       },
     },
-  },
-
-  {
-    "numToStr/Comment.nvim",
-    config = function()
-      require("Comment").setup()
-    end,
   },
 
   {
