@@ -1,75 +1,67 @@
+local function find_config(bufnr, config_files)
+  return vim.fs.find(config_files, {
+    upward = true,
+    stop = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
+    path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
+  })[1]
+end
+
+local function biome_or_prettier(bufnr)
+  local has_biome_config = find_config(bufnr, { "biome.json", "biome.jsonc" })
+  if has_biome_config then
+    return { "biome", stop_after_first = true }
+  end
+
+  local has_prettier_config = find_config(bufnr, {
+    ".prettierrc",
+    ".prettierrc.json",
+    ".prettierrc.yml",
+    ".prettierrc.yaml",
+    ".prettierrc.json5",
+    ".prettierrc.js",
+    ".prettierrc.cjs",
+    ".prettierrc.toml",
+    "prettier.config.js",
+    "prettier.config.cjs",
+  })
+  if has_prettier_config then
+    return { "prettier", stop_after_first = true }
+  end
+
+  -- Default to Prettier if no config is found
+  return { "prettier", stop_after_first = true }
+end
+
+local filetypes_with_dynamic_formatter = {
+  "javascript",
+  "javascriptreact",
+  "typescript",
+  "typescriptreact",
+  "vue",
+  "css",
+  "scss",
+  "less",
+  "html",
+  "json",
+  "jsonc",
+  "yaml",
+  "markdown",
+  "markdown.mdx",
+  "graphql",
+  "handlebars",
+}
+
 return {
-  "stevearc/conform.nvim",
-  opts = function()
-    ---@class ConformOpts
-    local opts = {
-      -- LazyVim will use these options when formatting with the conform.nvim formatter
-      default_format_opts = {
-        timeout_ms = 3000,
-        async = false, -- not recommended to change
-        quiet = false, -- not recommended to change
-        lsp_format = "fallback", -- not recommended to change
-      },
-      ---@type table<string, conform.FormatterUnit[]>
-      formatters_by_ft = {
-        lua = { "stylua" },
-        sh = { "shfmt" },
-        javascript = { "prettier", "biome" },
-        typescript = { "prettier", "biome" },
-        jsx = { "prettier", "biome" },
-        tsx = { "prettier", "biome" },
-        html = { "prettier" },
-        json = { "prettier" },
-        jsonc = { "prettier" },
-        yaml = { "prettier" },
-        ["markdown.mdx"] = { "prettier" },
-        css = { "stylelint" },
-        scss = { "stylelint" },
-        less = { "stylelint" },
-        dart = { "dart_format" },
-        rust = { "rustfmt" },
-        nix = { "nixfmt" },
-        python = { "ruff" },
-        swift = { "swift_format" },
-        kotlin = { "ktlint" },
-      },
-      -- The options you set here will be merged with the builtin formatters.
-      -- You can also define any custom formatters here.
-      ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
-      formatters = {
-        injected = { options = { ignore_errors = true } },
-        -- # Example of using dprint only when a dprint.json file is present
-        -- dprint = {
-        --   condition = function(ctx)
-        --     return vim.fs.find({ "dprint.json" }, { path = ctx.filename, upward = true })[1]
-        --   end,
-        -- },
-        --
-        -- # Example of using shfmt with extra args
-        -- shfmt = {
-        --   prepend_args = { "-i", "2", "-ci" },
-        -- },
-        biome = {
-          condition = function(ctx)
-            return vim.fs.find({ "biome.json" }, { path = ctx.filename, upward = true })[1] ~= nil
-          end,
-        },
-        prettier = {
-          condition = function(ctx)
-            return vim.fs.find({
-              ".prettierrc",
-              ".prettierrc.json",
-              ".prettierrc.js",
-              "prettier.config.js",
-              ".prettierrc.mjs",
-              "prettier.config.mjs",
-              ".prettierrc.cjs",
-              "prettier.config.cjs",
-            }, { path = ctx.filename, upward = true })[1] ~= nil
-          end,
-        },
-      },
-    }
-    return opts
-  end,
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = (function()
+        local result = {}
+        for _, ft in ipairs(filetypes_with_dynamic_formatter) do
+          result[ft] = biome_or_prettier
+        end
+        return result
+      end)(),
+    },
+  },
 }
