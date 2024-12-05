@@ -6,9 +6,6 @@ return {
   opts = {
     -- add any opts here
     provider = "openai",
-    openai = {
-      api_key_name = "cmd: op read op://private/OpenAI_API/credential --no-newline",
-    },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = "make",
