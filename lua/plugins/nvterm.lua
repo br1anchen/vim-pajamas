@@ -3,7 +3,7 @@ return {
   module = "nvterm",
   keys = {
     {
-      "<A-i>",
+      "<leader>ti",
       function()
         require("nvterm.terminal").toggle("float")
       end,
@@ -11,7 +11,7 @@ return {
       desc = "toggle floating term",
     },
     {
-      "<A-h>",
+      "<leader>th",
       function()
         require("nvterm.terminal").toggle("horizontal")
       end,
@@ -19,7 +19,7 @@ return {
       desc = "toggle horizontal term",
     },
     {
-      "<A-v>",
+      "<leader>tv",
       function()
         require("nvterm.terminal").toggle("vertical")
       end,
@@ -27,7 +27,7 @@ return {
       desc = "toggle vertical term",
     },
     {
-      "<A-i>",
+      "<leader>ti",
       function()
         require("nvterm.terminal").toggle("float")
       end,
@@ -35,7 +35,7 @@ return {
       desc = "toggle floating term",
     },
     {
-      "<A-h>",
+      "<leader>th",
       function()
         require("nvterm.terminal").toggle("horizontal")
       end,
@@ -43,7 +43,7 @@ return {
       desc = "toggle horizontal term",
     },
     {
-      "<A-v>",
+      "<leader>tv",
       function()
         require("nvterm.terminal").toggle("vertical")
       end,
