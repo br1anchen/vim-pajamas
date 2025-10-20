@@ -55,10 +55,6 @@ return {
               },
             },
           },
-          root_dir = root_pattern_exclude({
-            root = { "package.json" },
-            exclude = { "deno.json", "deno.jsonc" },
-          }),
         },
         yamlls = {
           settings = {
@@ -76,6 +72,14 @@ return {
           root_dir = root_pattern_exclude({
             root = { "biome.json", "biome.jsonc" },
           }),
+        },
+        oxlint = {
+          root_dir = root_pattern_exclude({
+            root = { ".oxlintrc.json" },
+          }),
+          settings = {
+            typeAware = true,
+          },
         },
       },
     },

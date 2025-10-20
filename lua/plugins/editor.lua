@@ -134,26 +134,26 @@ return {
     },
   },
 
-  {
-    "m4xshen/hardtime.nvim",
-    event = "VeryLazy",
-    opts = {},
-    config = function()
-      require("hardtime").setup({
-        disabled_filetypes = {
-          "qf",
-          "netrw",
-          "NvimTree",
-          "lazy",
-          "mason",
-          "neo-tree",
-          "neo-tree-popup",
-          "notify",
-          "DressingInput",
-        },
-      })
-    end,
-  },
+  -- {
+  --   "m4xshen/hardtime.nvim",
+  --   event = "VeryLazy",
+  --   opts = {},
+  --   config = function()
+  --     require("hardtime").setup({
+  --       disabled_filetypes = {
+  --         "qf",
+  --         "netrw",
+  --         "NvimTree",
+  --         "lazy",
+  --         "mason",
+  --         "neo-tree",
+  --         "neo-tree-popup",
+  --         "notify",
+  --         "DressingInput",
+  --       },
+  --     })
+  --   end,
+  -- },
 
   {
     "stevearc/oil.nvim",
@@ -166,6 +166,71 @@ return {
           show_hidden = true,
         },
       })
+    end,
+  },
+  {
+    "vuki656/package-info.nvim",
+    keys = {
+      {
+        "<leader>Ps",
+        function()
+          require("package-info").show()
+        end,
+        desc = "Show package info",
+        mode = "n",
+      },
+      {
+        "<leader>Pc",
+        function()
+          require("package-info").hide()
+        end,
+        desc = "Hide package info",
+        mode = "n",
+      },
+      {
+        "<leader>Pt",
+        function()
+          require("package-info").toggle()
+        end,
+        desc = "Toggle package info",
+        mode = "n",
+      },
+      {
+        "<leader>Pu",
+        function()
+          require("package-info").update()
+        end,
+        desc = "Update package version",
+        mode = "n",
+      },
+      {
+        "<leader>Pd",
+        function()
+          require("package-info").delete()
+        end,
+        desc = "Delete package",
+        mode = "n",
+      },
+      {
+        "<leader>Pi",
+        function()
+          require("package-info").install()
+        end,
+        desc = "Install package",
+        mode = "n",
+      },
+      {
+        "<leader>Pp",
+        function()
+          require("package-info").change_version()
+        end,
+        desc = "Change package version",
+        mode = "n",
+      },
+    },
+    requires = "MunifTanjim/nui.nvim",
+    config = function()
+      require("package-info").setup()
     end,
   },
 }
