@@ -9,7 +9,7 @@ return {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
-    depends = {
+    dependencies = {
       "s1n7ax/nvim-window-picker",
     },
     init = function() end,

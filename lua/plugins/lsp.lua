@@ -6,8 +6,8 @@ local function root_pattern_exclude(opt)
   local lsputil = require("lspconfig.util")
 
   return function(fname)
-    local excluded_root = lsputil.root_pattern(opt.exclude)(fname)
-    local included_root = lsputil.root_pattern(opt.root)(fname)
+    local excluded_root = opt.exclude and lsputil.root_pattern(unpack(opt.exclude))(fname) or nil
+    local included_root = lsputil.root_pattern(unpack(opt.root))(fname)
 
     if excluded_root then
       return nil
@@ -75,7 +75,8 @@ return {
         },
         oxlint = {
           root_dir = root_pattern_exclude({
-            root = { ".oxlintrc.json" },
+            root = { ".oxlintrc.json", "package.json", ".git" },
+            exclude = { "biome.json", "biome.jsonc", "deno.json", "deno.jsonc" },
           }),
           settings = {
             typeAware = true,

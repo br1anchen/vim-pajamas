@@ -228,7 +228,7 @@ return {
         mode = "n",
       },
     },
-    requires = "MunifTanjim/nui.nvim",
+    dependencies = "MunifTanjim/nui.nvim",
     config = function()
       require("package-info").setup()
     end,

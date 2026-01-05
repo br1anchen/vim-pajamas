@@ -1,6 +1,5 @@
 return {
   "NvChad/nvterm",
-  module = "nvterm",
   keys = {
     {
       "<leader>ti",

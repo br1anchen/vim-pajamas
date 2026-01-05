@@ -6,7 +6,7 @@ local function find_config(bufnr, config_files)
   })[1]
 end
 
-local function biome_or_prettier(bufnr)
+local function biome_or_prettier_or_default(bufnr)
   local has_biome_config = find_config(bufnr, { "biome.json", "biome.jsonc" })
   if has_biome_config then
     return { "biome", stop_after_first = true }
@@ -28,7 +28,7 @@ local function biome_or_prettier(bufnr)
     return { "prettier", stop_after_first = true }
   end
 
-  -- Default to Prettier if no config is found
+  -- Default to prettier if no config is found
   return { "prettier", stop_after_first = true }
 end
 
@@ -58,7 +58,7 @@ return {
       formatters_by_ft = (function()
         local result = {}
         for _, ft in ipairs(filetypes_with_dynamic_formatter) do
-          result[ft] = biome_or_prettier
+          result[ft] = biome_or_prettier_or_default
         end
         return result
       end)(),
