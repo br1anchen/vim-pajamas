@@ -1,8 +1,12 @@
 local function find_config(bufnr, config_files)
+  local bufname = vim.api.nvim_buf_get_name(bufnr)
+  if bufname == "" then
+    return nil
+  end
+  local path = vim.fs.dirname(bufname)
   return vim.fs.find(config_files, {
     upward = true,
-    stop = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
-    path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
+    path = path,
   })[1]
 end
 
