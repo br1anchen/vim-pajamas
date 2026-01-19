@@ -98,12 +98,12 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters = {
-        -- Custom oxfmt formatter definition with stdin support (oxfmt >= 0.18.0)
-        -- See: https://github.com/oxc-project/oxc/pull/16868
+        -- Custom oxfmt formatter definition using temp file (more reliable for large files)
+        -- stdin mode had issues with truncated output on large buffers
         oxfmt = {
           command = "oxfmt",
-          args = { "--stdin-filepath", "$FILENAME" },
-          stdin = true,
+          args = { "--write", "$FILENAME" },
+          stdin = false,
           cwd = require("conform.util").root_file({
             ".oxfmtrc.json",
             "oxfmt.json",

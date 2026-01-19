@@ -7,3 +7,6 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 vim.g.lazyvim_prettier_needs_config = false
+
+-- Enable auto-format on save
+vim.g.autoformat = true
