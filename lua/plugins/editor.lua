@@ -157,16 +157,35 @@ return {
 
   {
     "stevearc/oil.nvim",
-    opts = {},
-    -- Optional dependencies
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("oil").setup({
-        view_options = {
-          show_hidden = true,
-        },
-      })
-    end,
+    lazy = false, -- Load immediately to handle `nvim .`
+    keys = {
+      { "-", "<cmd>Oil<cr>", desc = "Open parent directory (Oil)" },
+    },
+    opts = {
+      default_file_explorer = true, -- Replace netrw as the default file explorer
+      view_options = {
+        show_hidden = true,
+      },
+      keymaps = {
+        ["g?"] = "actions.show_help",
+        ["<CR>"] = "actions.select",
+        ["<C-v>"] = "actions.select_vsplit",
+        ["<C-s>"] = "actions.select_split",
+        ["<C-t>"] = "actions.select_tab",
+        ["<C-p>"] = "actions.preview",
+        ["<C-c>"] = "actions.close",
+        ["<C-r>"] = "actions.refresh",
+        ["-"] = "actions.parent",
+        ["_"] = "actions.open_cwd",
+        ["`"] = "actions.cd",
+        ["~"] = "actions.tcd",
+        ["gs"] = "actions.change_sort",
+        ["gx"] = "actions.open_external",
+        ["g."] = "actions.toggle_hidden",
+        ["g\\"] = "actions.toggle_trash",
+      },
+    },
   },
   {
     "vuki656/package-info.nvim",
