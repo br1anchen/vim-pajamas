@@ -81,21 +81,20 @@ local oxfmt_supported_filetypes = {
   "typescriptreact",
   "vue",
   "css",
-  "json",
-  "jsonc",
-}
-
--- Additional filetypes that use biome/prettier but not oxfmt
-local biome_prettier_only_filetypes = {
   "scss",
   "less",
-  "html",
+  "json",
+  "jsonc",
   "yaml",
+  "html",
   "markdown",
   "markdown.mdx",
   "graphql",
   "handlebars",
 }
+
+-- Additional filetypes that use biome/prettier but not oxfmt
+local biome_prettier_only_filetypes = {}
 
 return {
   {

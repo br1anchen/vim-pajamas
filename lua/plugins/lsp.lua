@@ -261,6 +261,40 @@ return {
         eslint = {
           root_dir = find_eslint_root,
         },
+        -- JSON: disable formatting when oxfmt is configured (let conform.nvim handle it)
+        jsonls = {
+          on_attach = function(client, bufnr)
+            -- Check if oxfmt config exists for this buffer
+            local bufname = vim.api.nvim_buf_get_name(bufnr)
+            if bufname ~= "" then
+              local path = vim.fs.dirname(bufname)
+              local oxfmt_config = vim.fs.find({ ".oxfmtrc.json", "oxfmt.json" }, {
+                upward = true,
+                path = path,
+              })[1]
+
+              -- Also check package.json for oxfmt reference
+              local has_oxfmt = oxfmt_config ~= nil
+              if not has_oxfmt then
+                local package_json = vim.fs.find("package.json", { upward = true, path = path })[1]
+                if package_json then
+                  local file = io.open(package_json, "r")
+                  if file then
+                    local content = file:read("*a")
+                    file:close()
+                    has_oxfmt = content:find('"oxfmt"') ~= nil
+                  end
+                end
+              end
+
+              -- Disable jsonls formatting if oxfmt is configured
+              if has_oxfmt then
+                client.server_capabilities.documentFormattingProvider = false
+                client.server_capabilities.documentRangeFormattingProvider = false
+              end
+            end
+          end,
+        },
       },
     },
   },
