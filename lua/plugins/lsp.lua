@@ -104,6 +104,95 @@ local function find_oxlint_root(bufnr_or_fname, on_dir)
   return result
 end
 
+--- Check if @typescript/native-preview is in package.json dependencies
+---@param fname string
+---@return boolean
+local function has_tsgo_package(fname)
+  local path = vim.fn.fnamemodify(fname, ":p:h")
+  local package_jsons = vim.fs.find("package.json", { path = path, upward = true, type = "file", limit = math.huge })
+  for _, pj in ipairs(package_jsons) do
+    local file = io.open(pj, "r")
+    if file then
+      local content = file:read("*a")
+      file:close()
+      if content:find('"@typescript/native%-preview"') then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+--- Find tsgo root: only attach when @typescript/native-preview is in package.json
+--- Compatible with both old lspconfig style (fname) and new Nvim 0.11 style (bufnr, on_dir).
+---@param bufnr_or_fname number|string
+---@param on_dir? fun(dir: string|nil)
+---@return string|nil
+local function find_tsgo_root(bufnr_or_fname, on_dir)
+  local fname
+  if type(bufnr_or_fname) == "number" then
+    fname = vim.api.nvim_buf_get_name(bufnr_or_fname)
+  else
+    fname = bufnr_or_fname
+  end
+
+  -- Only attach if project has @typescript/native-preview
+  if not has_tsgo_package(fname) then
+    if on_dir then
+      on_dir(nil)
+    end
+    return nil
+  end
+
+  local path = vim.fn.fnamemodify(fname, ":p:h")
+
+  -- Look for tsconfig.json or package.json as root markers
+  local root_markers = { "tsconfig.json", "package.json" }
+  local root_file = vim.fs.find(root_markers, { path = path, upward = true, type = "file" })[1]
+  local result = root_file and vim.fs.dirname(root_file) or nil
+
+  if on_dir then
+    on_dir(result)
+  end
+
+  return result
+end
+
+--- Find vtsls root: exclude projects that use @typescript/native-preview (tsgo takes priority)
+--- Compatible with both old lspconfig style (fname) and new Nvim 0.11 style (bufnr, on_dir).
+---@param bufnr_or_fname number|string
+---@param on_dir? fun(dir: string|nil)
+---@return string|nil
+local function find_vtsls_root(bufnr_or_fname, on_dir)
+  local fname
+  if type(bufnr_or_fname) == "number" then
+    fname = vim.api.nvim_buf_get_name(bufnr_or_fname)
+  else
+    fname = bufnr_or_fname
+  end
+
+  local path = vim.fn.fnamemodify(fname, ":p:h")
+
+  -- If project has @typescript/native-preview, don't attach vtsls (tsgo takes priority)
+  if has_tsgo_package(fname) then
+    if on_dir then
+      on_dir(nil)
+    end
+    return nil
+  end
+
+  -- Standard TypeScript root detection
+  local root_markers = { "tsconfig.json", "jsconfig.json", "package.json" }
+  local root_file = vim.fs.find(root_markers, { path = path, upward = true, type = "file" })[1]
+  local result = root_file and vim.fs.dirname(root_file) or nil
+
+  if on_dir then
+    on_dir(result)
+  end
+
+  return result
+end
+
 --- Find eslint root, but exclude when oxlint is configured (oxlint takes priority)
 --- Compatible with both old lspconfig style (fname) and new Nvim 0.11 style (bufnr, on_dir).
 ---@param bufnr_or_fname number|string
@@ -189,6 +278,7 @@ return {
       servers = {
         sourcekit = {},
         vtsls = {
+          root_dir = find_vtsls_root,
           settings = {
             typescript = {
               inlayHints = {
@@ -201,6 +291,14 @@ return {
               },
             },
           },
+        },
+        -- tsgo (TypeScript Go / native port): only attach when @typescript/native-preview is in package.json
+        tsgo = {
+          root_dir = find_tsgo_root,
+          single_file_support = false,
+          -- tsgo uses `tsgo --lsp` for language server mode
+          cmd = { "tsgo", "--lsp" },
+          filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         },
         yamlls = {
           settings = {
