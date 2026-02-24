@@ -104,22 +104,62 @@ local function find_oxlint_root(bufnr_or_fname, on_dir)
   return result
 end
 
---- Check if @typescript/native-preview is in package.json dependencies
+local tsgo_package_cache = {}
+
+---@param fname string
+---@return string|nil
+local function nearest_package_json(fname)
+  local root = lsputil.root_pattern("package.json")(fname)
+  if not root then
+    return nil
+  end
+  return vim.fs.joinpath(root, "package.json")
+end
+
+--- Check if @typescript/native-preview is in nearest package.json dependencies
 ---@param fname string
 ---@return boolean
 local function has_tsgo_package(fname)
-  local path = vim.fn.fnamemodify(fname, ":p:h")
-  local package_jsons = vim.fs.find("package.json", { path = path, upward = true, type = "file", limit = math.huge })
-  for _, pj in ipairs(package_jsons) do
-    local file = io.open(pj, "r")
-    if file then
-      local content = file:read("*a")
-      file:close()
-      if content:find('"@typescript/native%-preview"') then
-        return true
-      end
+  local package_json = nearest_package_json(fname)
+  if not package_json then
+    return false
+  end
+
+  if tsgo_package_cache[package_json] ~= nil then
+    return tsgo_package_cache[package_json]
+  end
+
+  local file = io.open(package_json, "r")
+  if not file then
+    tsgo_package_cache[package_json] = false
+    return false
+  end
+
+  local content = file:read("*a")
+  file:close()
+
+  local ok, json = pcall(vim.json.decode, content)
+  if not ok or type(json) ~= "table" then
+    tsgo_package_cache[package_json] = false
+    return false
+  end
+
+  local dependency_fields = {
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+    "optionalDependencies",
+  }
+
+  for _, field in ipairs(dependency_fields) do
+    local deps = json[field]
+    if type(deps) == "table" and deps["@typescript/native-preview"] then
+      tsgo_package_cache[package_json] = true
+      return true
     end
   end
+
+  tsgo_package_cache[package_json] = false
   return false
 end
 
@@ -144,12 +184,9 @@ local function find_tsgo_root(bufnr_or_fname, on_dir)
     return nil
   end
 
-  local path = vim.fn.fnamemodify(fname, ":p:h")
-
-  -- Look for tsconfig.json or package.json as root markers
-  local root_markers = { "tsconfig.json", "package.json" }
-  local root_file = vim.fs.find(root_markers, { path = path, upward = true, type = "file" })[1]
-  local result = root_file and vim.fs.dirname(root_file) or nil
+  -- Use the nearest package.json (with @typescript/native-preview) as root
+  local package_json = nearest_package_json(fname)
+  local result = package_json and vim.fs.dirname(package_json) or nil
 
   if on_dir then
     on_dir(result)
@@ -181,8 +218,17 @@ local function find_vtsls_root(bufnr_or_fname, on_dir)
     return nil
   end
 
-  -- Standard TypeScript root detection
-  local root_markers = { "tsconfig.json", "jsconfig.json", "package.json" }
+  -- Standard TypeScript root detection (prefer nearest package.json)
+  local package_json = nearest_package_json(fname)
+  if package_json then
+    local result = vim.fs.dirname(package_json)
+    if on_dir then
+      on_dir(result)
+    end
+    return result
+  end
+
+  local root_markers = { "tsconfig.json", "jsconfig.json" }
   local root_file = vim.fs.find(root_markers, { path = path, upward = true, type = "file" })[1]
   local result = root_file and vim.fs.dirname(root_file) or nil
 
@@ -279,6 +325,9 @@ return {
         sourcekit = {},
         vtsls = {
           root_dir = find_vtsls_root,
+          -- Prevent vtsls from attaching with root=nil in tsgo projects.
+          single_file_support = false,
+          workspace_required = true,
           settings = {
             typescript = {
               inlayHints = {
@@ -296,8 +345,6 @@ return {
         tsgo = {
           root_dir = find_tsgo_root,
           single_file_support = false,
-          -- tsgo uses `tsgo --lsp` for language server mode
-          cmd = { "tsgo", "--lsp" },
           filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         },
         yamlls = {
