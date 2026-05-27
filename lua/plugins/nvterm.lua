@@ -2,31 +2,7 @@ return {
   "NvChad/nvterm",
   keys = {
     {
-      "<leader>ti",
-      function()
-        require("nvterm.terminal").toggle("float")
-      end,
-      mode = "t",
-      desc = "toggle floating term",
-    },
-    {
-      "<leader>th",
-      function()
-        require("nvterm.terminal").toggle("horizontal")
-      end,
-      mode = "t",
-      desc = "toggle horizontal term",
-    },
-    {
-      "<leader>tv",
-      function()
-        require("nvterm.terminal").toggle("vertical")
-      end,
-      mode = "t",
-      desc = "toggle vertical term",
-    },
-    {
-      "<leader>ti",
+      "<leader>Tf",
       function()
         require("nvterm.terminal").toggle("float")
       end,
@@ -34,7 +10,7 @@ return {
       desc = "toggle floating term",
     },
     {
-      "<leader>th",
+      "<leader>Th",
       function()
         require("nvterm.terminal").toggle("horizontal")
       end,
@@ -42,7 +18,7 @@ return {
       desc = "toggle horizontal term",
     },
     {
-      "<leader>tv",
+      "<leader>Tv",
       function()
         require("nvterm.terminal").toggle("vertical")
       end,
